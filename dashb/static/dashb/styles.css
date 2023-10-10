@@ -1,0 +1,12 @@
+body {
+    background-color: rgb(12, 232, 89);
+}
+
+.green {
+    color: rgb(12, 232, 89);
+}
+
+.black {
+    color: black;
+    font-weight: bolder;
+}
