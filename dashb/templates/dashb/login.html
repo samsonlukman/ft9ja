@@ -1,13 +1,76 @@
-
-
-<h1>User Login</h1>
-<form method="post">
+<h1 class="form-title">User Login</h1>
+<form method="post" class="login-form">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Login</button>
+    <button type="submit" class="login-button">Login</button>
 </form>
-<p>
-    No account? <a href="{% url 'register' %}">Register</a>
+<p class="register-link">
+    No account? <a href="{% url 'register' %}" class="register-anchor">Register</a>
 </p>
-<p>Testing</p>
 
+
+<style>
+    /* Apply styles to the form container */
+.login-form {
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Style the form header */
+.form-title {
+    text-align: center;
+    color: #333;
+}
+
+/* Style form elements (labels and input fields) */
+label {
+    display: block;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+}
+
+/* Style the Login button */
+.login-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Style the Register link */
+.register-link {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.register-anchor {
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+}
+
+.register-anchor:hover {
+    text-decoration: underline;
+}
+
+</style>

@@ -1,12 +1,14 @@
 import random
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.db import transaction
 from django.contrib.auth import login, logout
 import matplotlib.pyplot as plt
 import io
 import base64
 from dashb.models import Trader, Trade
 from django.http import JsonResponse
+from decimal import Decimal
 
 def index(request):
     if not request.user.is_authenticated:
@@ -44,7 +46,7 @@ def index(request):
     plt.plot(timestamps, profit_or_loss, label='Profit/Loss')
     plt.xlabel('Timestamp')
     plt.ylabel('Profit/Loss')
-    plt.title(f'Dear {current_trader.name}, Profit/Loss Over Time')
+    plt.title(f'Dear {current_trader.name}, your Profit/Loss Over Time')
     plt.legend()
 
     # Save the graph as a base64 encoded image
@@ -99,9 +101,7 @@ def simulate_profit_or_loss_api(request):
     }
     return JsonResponse(response_data)
 
-def admin_dashboard(request):
-    # Implement admin dashboard logic here
-    return render(request, 'dashb/admin_dashboard.html')
+
 
 
 
@@ -109,9 +109,18 @@ def register_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('index')  # Redirect to the dashboard or any other desired page
+            with transaction.atomic():
+                user = form.save()
+
+                # Get the username provided by the user
+                username = form.cleaned_data.get('username')
+
+                # Create a new Trader object with the user's name and starting capital
+                trader = Trader(user=user, name=username, starting_capital=Decimal('100.00'))
+                trader.save()
+
+                login(request, user)
+                return redirect('index')  # Redirect to the dashboard or any other desired page
     else:
         form = UserCreationForm()
     return render(request, 'dashb/register.html', {'form': form})
