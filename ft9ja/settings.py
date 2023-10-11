@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-szrr)@v%zv6)uazq0(!%fl#$f#j5hr9=#hyjdwq_fh@62hysoj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['ft9jadash.pythonanywhere.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -77,6 +77,7 @@ WSGI_APPLICATION = 'ft9ja.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -94,7 +95,6 @@ DATABASES = {
         }
     }
 }
-"""
 
 
 # Password validation

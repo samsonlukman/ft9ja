@@ -1,5 +1,6 @@
+from .forms import CustomUserCreationForm
 import random
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect, reverse
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.db import transaction
 from django.contrib.auth import login, logout
@@ -10,10 +11,12 @@ from dashb.models import Trader, Trade
 from django.http import JsonResponse
 from decimal import Decimal
 
+
 def index(request):
     if not request.user.is_authenticated:
-        return render(request, 'dashb/register.html')
-    
+        return HttpResponseRedirect(reverse('register'))
+
+
     current_trader = Trader.objects.get(user_id=request.user)
     capital = current_trader.starting_capital
 
@@ -46,7 +49,7 @@ def index(request):
     plt.plot(timestamps, profit_or_loss, label='Profit/Loss')
     plt.xlabel('Timestamp')
     plt.ylabel('Profit/Loss')
-    plt.title(f'Dear {current_trader.name}, your Profit/Loss Over Time')
+    plt.title(f'Dear {current_trader.name}, your Profit/Loss Over Time             Capital: ${capital}')
     plt.legend()
 
     # Save the graph as a base64 encoded image
@@ -105,9 +108,10 @@ def simulate_profit_or_loss_api(request):
 
 
 
+
 def register_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             with transaction.atomic():
                 user = form.save()
@@ -122,8 +126,9 @@ def register_view(request):
                 login(request, user)
                 return redirect('index')  # Redirect to the dashboard or any other desired page
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'dashb/register.html', {'form': form})
+
 
 def login_view(request):
     if request.method == 'POST':
